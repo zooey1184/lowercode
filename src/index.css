@@ -1,0 +1,12 @@
+.overlayItem:hover {
+  color: #1890ff;
+  background-color: rgba(0,0,0,0.1);
+}
+
+.overlayItem {
+  padding: 4px 16px;
+}
+
+.filterPane .ant-popover-inner-content  {
+  padding: 0;
+}
