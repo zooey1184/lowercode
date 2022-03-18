@@ -1,12 +1,34 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, reactive, watchEffect, nextTick } from "vue";
 import PropsPane from "./components/props-pane/index.vue";
 import HeaderContent from "./components/header-pane/index.vue";
 import WidgetPane from "./components/widget-pane/index.vue";
 import draggable from "vuedraggable";
 import Drag from "./components/drag/index.vue";
 import Container from "./components/container/index.vue";
+import FreePane from './components/freepane'
 const myArray = ref([]);
+
+const parent = ref(null)
+const parentRect = reactive({
+  x: 0,
+  y: 0,
+  w: 300,
+  h: 600
+})
+watchEffect(() => {
+  if (parent.value) {
+    nextTick(()=> {
+      const rect = parent.value.getBoundingClientRect()
+    console.log(rect);
+    parentRect.x = rect.x
+    parentRect.y = rect.y
+    parentRect.h = rect.height
+    parentRect.w = rect.width
+    })
+
+  }
+})
 
 const myArray2 = ref([
   {
@@ -86,8 +108,9 @@ const handleHeaderItem = (e) => {
         </div>
       </a-layout-sider>
       <a-layout>
-        <a-layout-content>
-          <div class="centerContainer">
+        <a-layout-content class="main">
+          <div class="centerContainer pos-r" ref='parent'>
+            <!-- <FreePane :parent='parentRect'></FreePane> -->
             <DraggableContainer>
               <Container v-for="item in containerList" :key="item.value">
                 <Drag
@@ -127,10 +150,29 @@ const handleHeaderItem = (e) => {
   width: 375px;
   height: 600px;
   margin: 10px auto;
-  border: 1px solid #ccc;
+  // border: 1px solid #ccc;
   box-sizing: border-box;
   overflow: auto;
   background: #fafafa;
   border-radius: 2px;
+}
+.main {
+  background-color: #e9eef3;
+  background-image: linear-gradient(
+      45deg,
+      #f5f5f5 25%,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 75%,
+      #f5f5f5 0
+    ),
+    linear-gradient(
+      45deg,
+      #f5f5f5 25%,
+      rgba(0, 0, 0, 0) 0,
+      rgba(0, 0, 0, 0) 75%,
+      #f5f5f5 0
+    );
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
 }
 </style>
